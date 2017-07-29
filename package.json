@@ -18,5 +18,9 @@
   "homepage": "https://github.com/nobobo1234/tweety#readme",
   "engines": {
     "node": ">=8.0.0"
+  },
+  "dependencies": {
+    "secure-random": "^1.1.1",
+    "snekfetch": "^3.2.4"
   }
 }
