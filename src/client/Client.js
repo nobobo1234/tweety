@@ -1,20 +1,18 @@
-//const url = require('url');
-//const snekfetch = require('snekfetch');
 const crypto = require('crypto');
 const helper = require('../util/helper');
 const snekfetch = require('snekfetch');
-const { API } = require('./api')
+const { API } = require('./api');
 
 class Client {
     constructor(credentials = {}) {
         if(!(this instanceof Client)) {
 
-            return new Client(config);
+            return new Client(credentials);
         }
         
         this.validateConfig(credentials);
         Object.defineProperty(this, 'credentials', {writable: false, value: credentials});
-        this.API = new API(this)
+        this.API = new API(this);
     }
     
     async login() {
@@ -28,23 +26,23 @@ class Client {
             oauth_timestamp: timestamp,
             oauth_token: this.credentials.access_token,
             oauth_version: '1.0'
-        }
-        options = helper.sortObject(options)
-        const paramval = helper.fixedEncodeURIComponent(helper.stringfiller('param', options)).replace(/%/g, (c) => '%' + c.charCodeAt(0).toString(16))
-        const url = helper.fixedEncodeURIComponent('https://api.twitter.com/1.1/account/verify_credentials.json')
+        };
+        options = helper.sortObject(options);
+        const paramval = helper.fixedEncodeURIComponent(helper.stringfiller('param', options)).replace(/%/g, (c) => '%' + c.charCodeAt(0).toString(16));
+        const url = helper.fixedEncodeURIComponent('https://api.twitter.com/1.1/account/verify_credentials.json');
         const basesign = `GET&${url}&${paramval}`;
-        console.log(basesign)
+        console.log(basesign);
         options.oauth_signature = crypto.createHmac('sha1', signkey).update(basesign).digest('base64');
-        options = helper.sortObject(options)
-        const headerval = helper.stringfiller('oauthheader', options)
-    //         console.log(options.signature)
-    //         console.log(paramval);
+        options = helper.sortObject(options);
+        const headerval = helper.stringfiller('oauthheader', options);
+        // console.log(options.signature)
+        // console.log(paramval);
         const resp = await snekfetch.get('https://api.twitter.com/1.1/account/verify_credentials.json')
             .set('Accept', '*/*')
             .set(`Authorization`, headerval)
             .set('Connection', 'close')
             .set('Content-Type', 'application/x-www-form-urlencoded')
-            .catch(e => console.log(e))
+            .catch(e => console.log(e));
     }
     
     validateConfig(config) {
@@ -87,6 +85,6 @@ const client = new Client({
     consumer_secret: 'ka3oaRmttoXws0iUpJc3fzFiAX0uCMpsUwC7Qaih8eBrc7e7z8',
     access_token: '1022269892-xCanMkBoleSlsRJ9YgIsv4MF4Gwt1nKpIbOMbbz',
     access_token_secret: 'vZ3edDHFnIyZwFlET30GsqKx9ec6upf4quxyzqElhNzJP'
-})
+});
 
 client.login();
