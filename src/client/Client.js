@@ -1,8 +1,4 @@
-const crypto = require('crypto');
-const helper = require('../util/helper');
-const snekfetch = require('snekfetch');
-const { API } = require('./api');
-const URL = require('url');
+const { API } = require('./API');
 
 class Client {
     constructor(credentials = {}) {
@@ -17,7 +13,7 @@ class Client {
     }
     
     async login() {
-        const resp = await this.api.request('GET', 'https://api.twitter.com/1.1/account/verify_credentials.json');
+        const resp = await this.API.request('GET', 'https://api.twitter.com/1.1/account/verify_credentials.json');
         console.log(resp);
     }
     
@@ -56,11 +52,4 @@ class Client {
     }
 }
 
-const client = new Client({
-    consumer_key: 'OwbTqMiRZ4CdnXVSYCtb0Iw0C',
-    consumer_secret: 'ka3oaRmttoXws0iUpJc3fzFiAX0uCMpsUwC7Qaih8eBrc7e7z8',
-    access_token: '1022269892-xCanMkBoleSlsRJ9YgIsv4MF4Gwt1nKpIbOMbbz',
-    access_token_secret: 'vZ3edDHFnIyZwFlET30GsqKx9ec6upf4quxyzqElhNzJP'
-});
-
-client.login();
+module.exports = Client;
